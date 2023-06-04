@@ -30,10 +30,11 @@ Mintable helps you:
 Requires `node >= v11.0.0`.
 
 1. Sign up for [Plaid's Free Plan](https://plaid.com/pricing/).
-2. Install Mintable:
+2. Clone Repo
+3. Install Mintable:
 
     ```bash
-    npm install -g mintable
+    ./install_runme
     mintable setup
     ```
 
