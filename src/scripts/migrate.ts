@@ -82,14 +82,8 @@ export default () => {
                     name: 'Google Sheets',
 
                     credentials: {
-                        clientId: oldConfig['SHEETS_CLIENT_ID'],
-                        clientSecret: oldConfig['SHEETS_CLIENT_SECRET'],
-                        redirectUri: defaultGoogleConfig.credentials.redirectUri,
-                        accessToken: oldConfig['SHEETS_ACCESS_TOKEN'],
-                        refreshToken: oldConfig['SHEETS_REFRESH_TOKEN'],
-                        scope: defaultGoogleConfig.credentials.scope,
-                        tokenType: oldConfig['SHEETS_TOKEN_TYPE'],
-                        expiryDate: parseInt(oldConfig['SHEETS_EXPIRY_DATE'])
+                        keyFile: oldConfig['SHEETS_CLIENT_ID'],
+                        scope: defaultGoogleConfig.credentials.scope
                     },
                     documentId: oldConfig['SHEETS_SHEET_ID'],
 

@@ -27,16 +27,9 @@ export default async () => {
                         0 < s.length && s.length <= 64 ? true : 'Must be between 0 and 64 characters in length.'
                 },
                 {
-                    type: 'password',
-                    name: 'clientId',
-                    message: 'Client ID',
-                    validate: (s: string) => (s.length >= 8 ? true : 'Must be at least 8 characters in length.')
-                },
-                {
-                    type: 'password',
-                    name: 'clientSecret',
-                    message: 'Client Secret',
-                    validate: (s: string) => (s.length >= 8 ? true : 'Must be at least 8 characters in length.')
+                    type: 'text',
+                    name: 'keyFile',
+                    message: 'keyFile JSON Path'
                 },
                 {
                     type: 'text',
@@ -52,8 +45,7 @@ export default async () => {
 
                 googleConfig.name = credentials.name
                 googleConfig.documentId = credentials.documentId
-                googleConfig.credentials.clientId = credentials.clientId
-                googleConfig.credentials.clientSecret = credentials.clientSecret
+                googleConfig.credentials.keyFile = credentials.keyFile
 
                 config.integrations[IntegrationId.Google] = googleConfig
 
@@ -63,33 +55,12 @@ export default async () => {
                 return config
             })
 
-            const google = new GoogleIntegration(getConfig())
-            open(google.getAuthURL())
-
-            console.log('\n\t5. A link will open in your browser asking you to sign in')
-            console.log('\t6. Sign in with the account you want to use with Mintable')
-            console.log(
-                "\t7. If you see a page saying 'This app isn't verified', click 'Advanced' and then 'Go to app (unsafe)'"
-            )
-            console.log("\t8. Click 'Allow' on both of the next two screens")
-            console.log('\t9. Copy & paste the code from your browser below:\n')
-
-            const authentication = await prompts([
-                {
-                    type: 'password',
-                    name: 'code',
-                    message: 'Enter the code from your browser here',
-                    validate: (s: string) => (s.length >= 8 ? true : 'Must be at least 8 characters in length.')
-                }
-            ])
-
-            const tokens = await google.getAccessTokens(authentication.code)
-            await google.saveAccessTokens(tokens)
+            /*const google = new GoogleIntegration(getConfig())*/
 
             logInfo('Successfully set up Google Integration.')
             return resolve()
         } catch (e) {
-            logError('Unable to set up Plaid Integration.', e)
+            logError('Unable to set up Google Integration.', e)
             return reject()
         }
     })

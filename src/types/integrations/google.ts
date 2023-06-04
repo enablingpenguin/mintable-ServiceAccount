@@ -6,15 +6,9 @@ export interface GoogleTemplateSheetSettings {
 }
 
 export interface GoogleCredentials {
-  clientId: string
-  clientSecret: string
-  redirectUri: string
+  keyFile: string
   
-  accessToken?: string
-  refreshToken?: string
   scope?: string[]
-  tokenType?: string
-  expiryDate?: number
 }
 
 export interface GoogleConfig extends BaseIntegrationConfig {
@@ -35,9 +29,7 @@ export const defaultGoogleConfig: GoogleConfig = {
   type: IntegrationType.Export,
 
   credentials: {
-    clientId: '',
-    clientSecret: '',
-    redirectUri: 'urn:ietf:wg:oauth:2.0:oob',
+    keyFile: '',
     scope: ['https://www.googleapis.com/auth/spreadsheets'],
   },
   documentId: ''

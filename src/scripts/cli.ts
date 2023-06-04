@@ -34,7 +34,8 @@ import { logError } from '../common/logging'
         console.log(chalk.green(line))
     })
 
-    console.log(' M I N T A B L E\n')
+    console.log(' M I N T A B L E (Service Account Fork)\n')
+	console.log('https://github.com/enablingpenguin/mintable-ServiceAccount \n')
 
     const commands = {
         migrate: migrate,

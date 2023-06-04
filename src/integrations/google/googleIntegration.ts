@@ -2,7 +2,6 @@ import { google, sheets_v4 } from 'googleapis'
 import { Config, updateConfig } from '../../common/config'
 import { IntegrationId } from '../../types/integrations'
 import { GoogleConfig } from '../../types/integrations/google'
-import { OAuth2Client, Credentials } from 'google-auth-library'
 import { logInfo, logError } from '../../common/logging'
 import { Account } from '../../types/account'
 import { sortBy, groupBy } from 'lodash'
@@ -22,53 +21,19 @@ export interface DataRange {
 export class GoogleIntegration {
     config: Config
     googleConfig: GoogleConfig
-    client: OAuth2Client
     sheets: sheets_v4.Resource$Spreadsheets
 
     constructor(config: Config) {
         this.config = config
         this.googleConfig = config.integrations[IntegrationId.Google] as GoogleConfig
+		
+		const auth = new google.auth.GoogleAuth({
+			keyFile: this.googleConfig.credentials.keyFile,
+			scopes: this.googleConfig.credentials.scope,
+		});
 
-        this.client = new google.auth.OAuth2(
-            this.googleConfig.credentials.clientId,
-            this.googleConfig.credentials.clientSecret,
-            this.googleConfig.credentials.redirectUri
-        )
-
-        this.client.setCredentials({
-            access_token: this.googleConfig.credentials.accessToken,
-            refresh_token: this.googleConfig.credentials.refreshToken,
-            token_type: this.googleConfig.credentials.tokenType,
-            expiry_date: this.googleConfig.credentials.expiryDate
-        })
-
-        this.sheets = google.sheets({
-            version: 'v4',
-            auth: this.client
-        }).spreadsheets
-    }
-
-    public getAuthURL = (): string =>
-        this.client.generateAuthUrl({
-            scope: this.googleConfig.credentials.scope
-        })
-
-    public getAccessTokens = (authCode: string): Promise<Credentials> =>
-        this.client.getToken(authCode).then(response => response.tokens)
-
-    public saveAccessTokens = (tokens: Credentials): void => {
-        updateConfig(config => {
-            let googleConfig = config.integrations[IntegrationId.Google] as GoogleConfig
-
-            googleConfig.credentials.accessToken = tokens.access_token
-            googleConfig.credentials.refreshToken = tokens.refresh_token
-            googleConfig.credentials.tokenType = tokens.token_type
-            googleConfig.credentials.expiryDate = tokens.expiry_date
-
-            config.integrations[IntegrationId.Google] = googleConfig
-
-            return config
-        })
+		this.sheets = google.sheets({version: 'v4', auth: auth}).spreadsheets;
+		
     }
 
     public getSheets = (documentId?: string): Promise<sheets_v4.Schema$Sheet[]> => {
