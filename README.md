@@ -34,7 +34,7 @@ Requires `node >= v11.0.0`.
 3. Install Mintable:
 
     ```bash
-    ./install_runme
+    ./install_runme.sh
     mintable setup
     ```
 
